@@ -1,0 +1,1115 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=320; user-scalable=no" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>PhoneGap</title>
+    <link rel="stylesheet" href="master.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <script type="text/javascript" charset="utf-8" src="jquery-1.6.1.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="phonegap-1.2.0.js"></script>
+    <script type='text/javascript' src='knockout-2.0.0.js'></script>
+    <script type="text/javascript" charset="utf-8" src="viewmodel.js"></script>
+    <style>
+      body{
+        font-family:helvetica;
+        font-size:1em;
+      }
+      *{
+        position:relative;
+        margin:0px;
+      }
+      #content{
+        width:320px;
+        height:480px;
+      }
+      #content > div{
+        width:100%;
+        height:100%;
+        display:none;
+        overflow:hidden;
+        background:url('bg.png');
+      }
+      .main,
+      .edit,
+      .new{
+        width:100%;
+        height:100%;
+        background:url('bg.png');
+      }
+      .main{
+        position:absolute;
+        left:0px;
+        top:0px;
+      }
+      .edit{
+        position:absolute;
+        right:-100%;
+        top:0px;
+        z-index:20;
+      }
+      .new{
+        position:absolute;
+        bottom:-100%;
+        z-index:20;
+      }
+      .main .top{
+        width:100%;
+        height:90%;
+      }
+      .main .top .header,
+      .edit .header,
+      .new .header{
+        background: rgb(109,179,242);
+        background: -moz-linear-gradient(top,  rgba(109,179,242,1) 0%, rgba(84,163,238,1) 50%, rgba(54,144,240,1) 51%, rgba(30,105,222,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(109,179,242,1)), color-stop(50%,rgba(84,163,238,1)), color-stop(51%,rgba(54,144,240,1)), color-stop(100%,rgba(30,105,222,1)));
+        background: -webkit-linear-gradient(top,  rgba(109,179,242,1) 0%,rgba(84,163,238,1) 50%,rgba(54,144,240,1) 51%,rgba(30,105,222,1) 100%);
+        background: -o-linear-gradient(top,  rgba(109,179,242,1) 0%,rgba(84,163,238,1) 50%,rgba(54,144,240,1) 51%,rgba(30,105,222,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(109,179,242,1) 0%,rgba(84,163,238,1) 50%,rgba(54,144,240,1) 51%,rgba(30,105,222,1) 100%);
+        background: linear-gradient(top,  rgba(109,179,242,1) 0%,rgba(84,163,238,1) 50%,rgba(54,144,240,1) 51%,rgba(30,105,222,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6db3f2', endColorstr='#1e69de',GradientType=0 );
+
+        color:white;
+        height:10%;
+        text-shadow: 0px -1px -1px grey;
+      }
+      .edit .header,
+      .new .header{
+        height:9%
+      }
+      .main .top .header h1,
+      .edit .header h1,
+      .new .header h1{
+        font-size: 1.4em;
+        line-height: 40px;
+        text-align: center;
+      }
+      .edit .inside .title,
+      .edit .inside .description,
+      .new .inside .title,
+      .new .inside .description{
+        background-color: white;
+        margin: 20px;
+        border-radius: 10px;
+      }
+      .edit .inside .label,
+      .new .inside .label{
+        display: inline-block;
+        width: 70px;
+        font-size:0.9em;
+        padding:17px;
+        border-right: 1px solid grey;
+      }
+      .edit .inside .text,
+      .new .inside .text{
+        width: 160px;
+        padding: 10px 2px;
+        font-size: 0.9em;
+        border: none;
+      }
+      .main .top .header .edit-button, 
+      .main .top .header .new-button,
+      .edit .header .cancel-button, 
+      .edit .header .save-button, 
+      .new .header .cancel-button,
+      .new .header .done-button,
+      #chart .header .done-button{
+        position: absolute;
+        padding: 1.5%;
+        top: 18%;
+        border-radius: 5px;
+        border: 1px solid white;
+        border-image: initial;
+        font-size: 90%;
+        background: rgba(0, 0, 0, 0.2);
+      }
+      .main .top .header .edit-button,
+      .edit .header .cancel-button,
+      .new .header .cancel-button{
+        left: 10px;
+        width: 45px;
+        text-align: center;
+      }
+      .edit .header .save-button, 
+      .new .header .done-button,
+       #chart .header .done-button{
+        right: 10px;
+        width: 45px;
+        text-align: center;
+      }
+      .main .top .header .new-button{
+        right: 10px;
+        font-size: 1.8em;
+        width: 17px;
+        text-align: center;
+        height: 15px;
+        line-height: 10px;
+        padding: 5px;
+        
+      }
+      .main .top .inside{
+        height:90%;
+      }
+      .main .bottom{
+        width:100%;
+        height:10%;
+        background-color:black;
+      }
+      .main .bottom .bottom-button{
+        float:left;
+        width:33.33%;
+        height:100%;
+      }
+      .main .bottom .bottom-button:not(:last-child){
+        border-right:1px solid #333;
+      }
+      .main .bottom .bottom-button.selected{
+        background: rgb(66,66,66);
+        background: -moz-linear-gradient(top,  rgba(66,66,66,1) 0%, rgba(57,57,57,1) 50%, rgba(50,50,50,1) 51%, rgba(43,43,43,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(66,66,66,1)), color-stop(50%,rgba(57,57,57,1)), color-stop(51%,rgba(50,50,50,1)), color-stop(100%,rgba(43,43,43,1)));
+        background: -webkit-linear-gradient(top,  rgba(66,66,66,1) 0%,rgba(57,57,57,1) 50%,rgba(50,50,50,1) 51%,rgba(43,43,43,1) 100%);
+        background: -o-linear-gradient(top,  rgba(66,66,66,1) 0%,rgba(57,57,57,1) 50%,rgba(50,50,50,1) 51%,rgba(43,43,43,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(66,66,66,1) 0%,rgba(57,57,57,1) 50%,rgba(50,50,50,1) 51%,rgba(43,43,43,1) 100%);
+        background: linear-gradient(top,  rgba(66,66,66,1) 0%,rgba(57,57,57,1) 50%,rgba(50,50,50,1) 51%,rgba(43,43,43,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#424242', endColorstr='#2b2b2b',GradientType=0 );
+      }
+      .main .bottom .bottom-button.selected p{
+        color:white;
+      }
+      .main .bottom .bottom-button p{
+        text-align:center;
+        font-size: 0.8em;
+        color:grey;
+      }
+      ul.inside{
+        margin:0px;
+        padding:0px;
+        overflow:auto;
+      }
+      ul.inside li{
+        list-style-type:none;
+        height:20%;
+        overflow:hidden;
+        border-bottom:1px solid #3F7FFF;
+        color: #333;
+        text-shadow: 0px 1px 1px white;
+        background: rgb(242,246,255);
+        background: -moz-linear-gradient(top,  rgba(242,246,255,1) 0%, rgba(214,227,255,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(242,246,255,1)), color-stop(100%,rgba(214,227,255,1)));
+        background: -webkit-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(214,227,255,1) 100%);
+        background: -o-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(214,227,255,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(214,227,255,1) 100%);
+        background: linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(214,227,255,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6ff', endColorstr='#d6e3ff',GradientType=0 );
+      }
+      ul.inside li .trash{
+        z-index: 10;
+        position: absolute;
+        left: 4px;
+        top: 29px;
+        width: 9px;
+        height: 19px;
+        background-color: red;
+        display: none;
+        color: white;
+        text-shadow: none;
+        padding: 0px 5px;
+        border-radius: 15px;
+        border: 2px solid white;
+        font-weight: bold;
+        -moz-box-shadow: 1px 1px 2px grey;
+        -webkit-box-shadow: 1px 1px 2px grey;
+        box-shadow: 1px 1px 2px grey;
+        background: rgb(255,170,170);
+        background: -moz-linear-gradient(top,  rgba(255,170,170,1) 0%, rgba(255,28,31,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,170,170,1)), color-stop(100%,rgba(255,28,31,1)));
+        background: -webkit-linear-gradient(top,  rgba(255,170,170,1) 0%,rgba(255,28,31,1) 100%);
+        background: -o-linear-gradient(top,  rgba(255,170,170,1) 0%,rgba(255,28,31,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(255,170,170,1) 0%,rgba(255,28,31,1) 100%);
+        background: linear-gradient(top,  rgba(255,170,170,1) 0%,rgba(255,28,31,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaaaa', endColorstr='#ff1c1f',GradientType=0 );
+      }
+      ul.inside li .title{
+        font-size: 120%;
+        padding: 9% 10%;
+        position: absolute;
+        font-weight: bold;
+      }
+      ul.inside li .date{
+        position: absolute;
+        font-size: 90%;
+        bottom: 10%;
+        right: 10%;
+      }
+      ul.inside li .arrow{
+        display: none;
+        position: absolute;
+        padding: 9% 5% 9% 82%;
+        right: 0%;
+      }
+
+      /* prayers */
+      #prayers .main .inside{
+        overflow:auto;
+      }
+
+      /* counter */
+      #counter .main .inside .stopwatch,
+      #counter .main .inside .log{
+        height:50%;       
+      }
+      #counter .main .inside .stopwatch{
+        background: rgb(175,175,175);
+        background: -moz-linear-gradient(top,  rgba(175,175,175,1) 0%, rgba(0,0,0,1) 52%, rgba(0,0,0,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(175,175,175,1)), color-stop(52%,rgba(0,0,0,1)), color-stop(100%,rgba(0,0,0,1)));
+        background: -webkit-linear-gradient(top,  rgba(175,175,175,1) 0%,rgba(0,0,0,1) 52%,rgba(0,0,0,1) 100%);
+        background: -o-linear-gradient(top,  rgba(175,175,175,1) 0%,rgba(0,0,0,1) 52%,rgba(0,0,0,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(175,175,175,1) 0%,rgba(0,0,0,1) 52%,rgba(0,0,0,1) 100%);
+        background: linear-gradient(top,  rgba(175,175,175,1) 0%,rgba(0,0,0,1) 52%,rgba(0,0,0,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#afafaf', endColorstr='#000000',GradientType=0 );
+      }
+      #counter .main .inside .display{
+        height:70%;
+      }
+      #counter .main .inside .display .display-totalChants,
+      #counter .main .inside .display .display-time,
+      #counter .main .inside .display .display-timeTotal{
+        display: block;
+        margin: 0px auto;
+        text-align: right;
+        width: 80%;
+      }
+      #counter .main .inside .display .display-totalChants{
+        padding: 4% 0px 2%;
+        font-size: 110%;        
+        color: #333;
+      }
+      #counter .main .inside .display .display-time{
+        font-size: 200%;
+        padding: 0% 0% 1%;
+        color: silver;
+      }
+      #counter .main .inside .display .display-timeTotal{
+        font-size: 300%;
+        color:white;
+      }
+      #counter .main .inside .buttons{
+        height:30%;
+        padding: 0% 8%;
+      }
+      #counter .main .inside .buttons > span{
+        display: inline-block;
+        width: 24%;
+        text-align: center;
+        margin: 3% 0% 3%;
+        padding: 9px 7px 15px;
+        height: 30%;
+        border-radius: 7px;
+        font-weight: bold;
+        text-shadow: 0px -1px -1px grey;
+        color: white;
+        font-size: 1.2em;
+      }
+      #counter .main .inside .buttons > span.buttons-start{
+        background: rgb(124,226,108);
+        background: -moz-linear-gradient(top,  rgba(124,226,108,1) 0%, rgba(110,226,93,1) 50%, rgba(30,229,0,1) 51%, rgba(30,229,0,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(124,226,108,1)), color-stop(50%,rgba(110,226,93,1)), color-stop(51%,rgba(30,229,0,1)), color-stop(100%,rgba(30,229,0,1)));
+        background: -webkit-linear-gradient(top,  rgba(124,226,108,1) 0%,rgba(110,226,93,1) 50%,rgba(30,229,0,1) 51%,rgba(30,229,0,1) 100%);
+        background: -o-linear-gradient(top,  rgba(124,226,108,1) 0%,rgba(110,226,93,1) 50%,rgba(30,229,0,1) 51%,rgba(30,229,0,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(124,226,108,1) 0%,rgba(110,226,93,1) 50%,rgba(30,229,0,1) 51%,rgba(30,229,0,1) 100%);
+        background: linear-gradient(top,  rgba(124,226,108,1) 0%,rgba(110,226,93,1) 50%,rgba(30,229,0,1) 51%,rgba(30,229,0,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7ce26c', endColorstr='#1ee500',GradientType=0 );
+       
+      }
+      #counter .main .inside .buttons > span.buttons-pause{
+        background: rgb(229,105,105);
+        background: -moz-linear-gradient(top,  rgba(229,105,105,1) 0%, rgba(226,72,72,1) 50%, rgba(232,0,0,1) 51%, rgba(232,0,0,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(229,105,105,1)), color-stop(50%,rgba(226,72,72,1)), color-stop(51%,rgba(232,0,0,1)), color-stop(100%,rgba(232,0,0,1)));
+        background: -webkit-linear-gradient(top,  rgba(229,105,105,1) 0%,rgba(226,72,72,1) 50%,rgba(232,0,0,1) 51%,rgba(232,0,0,1) 100%);
+        background: -o-linear-gradient(top,  rgba(229,105,105,1) 0%,rgba(226,72,72,1) 50%,rgba(232,0,0,1) 51%,rgba(232,0,0,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(229,105,105,1) 0%,rgba(226,72,72,1) 50%,rgba(232,0,0,1) 51%,rgba(232,0,0,1) 100%);
+        background: linear-gradient(top,  rgba(229,105,105,1) 0%,rgba(226,72,72,1) 50%,rgba(232,0,0,1) 51%,rgba(232,0,0,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e56969', endColorstr='#e80000',GradientType=0 );
+        
+      }
+      #counter .main .inside .buttons > span.buttons-reset{
+        background: rgb(167,167,167);
+        background: -moz-linear-gradient(top,  rgba(167,167,167,1) 0%, rgba(149,149,149,1) 50%, rgba(116,116,116,1) 51%, rgba(116,116,116,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(167,167,167,1)), color-stop(50%,rgba(149,149,149,1)), color-stop(51%,rgba(116,116,116,1)), color-stop(100%,rgba(116,116,116,1)));
+        background: -webkit-linear-gradient(top,  rgba(167,167,167,1) 0%,rgba(149,149,149,1) 50%,rgba(116,116,116,1) 51%,rgba(116,116,116,1) 100%);
+        background: -o-linear-gradient(top,  rgba(167,167,167,1) 0%,rgba(149,149,149,1) 50%,rgba(116,116,116,1) 51%,rgba(116,116,116,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(167,167,167,1) 0%,rgba(149,149,149,1) 50%,rgba(116,116,116,1) 51%,rgba(116,116,116,1) 100%);
+        background: linear-gradient(top,  rgba(167,167,167,1) 0%,rgba(149,149,149,1) 50%,rgba(116,116,116,1) 51%,rgba(116,116,116,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a7a7a7', endColorstr='#747474',GradientType=0 );
+       
+      }
+      #counter .main .inside .buttons > span.buttons-log{
+        background: rgb(255,190,137);
+        background: -moz-linear-gradient(top,  rgba(255,190,137,1) 0%, rgba(255,154,66,1) 50%, rgba(255,123,0,1) 51%, rgba(255,123,0,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,190,137,1)), color-stop(50%,rgba(255,154,66,1)), color-stop(51%,rgba(255,123,0,1)), color-stop(100%,rgba(255,123,0,1)));
+        background: -webkit-linear-gradient(top,  rgba(255,190,137,1) 0%,rgba(255,154,66,1) 50%,rgba(255,123,0,1) 51%,rgba(255,123,0,1) 100%);
+        background: -o-linear-gradient(top,  rgba(255,190,137,1) 0%,rgba(255,154,66,1) 50%,rgba(255,123,0,1) 51%,rgba(255,123,0,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(255,190,137,1) 0%,rgba(255,154,66,1) 50%,rgba(255,123,0,1) 51%,rgba(255,123,0,1) 100%);
+        background: linear-gradient(top,  rgba(255,190,137,1) 0%,rgba(255,154,66,1) 50%,rgba(255,123,0,1) 51%,rgba(255,123,0,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffbe89', endColorstr='#ff7b00',GradientType=0 );
+        
+      }
+      #counter .main .inside .buttons > span:not(:last-child){
+        margin-right:5%;
+      }
+      #counter .main.disabled .header .edit-button,
+      #counter .main.disabled .header .new-button,
+      #counter .main.disabled .inside .buttons .buttons-reset,
+      #counter .main.disabled .inside .buttons .buttons-log{
+        opacity:0.4;
+      }
+      #counter .main .inside ul.log{
+        margin:0px;
+        padding:0px;
+        overflow:auto;
+        color:white;
+        background: rgba(0, 0, 0, 0.5);
+        height: 51%;
+      }
+      #counter .main .inside ul.log li{
+        list-style-type:none;
+        height:25%;
+        border-bottom:1px solid #3F7FFF;
+        color: #333;
+        text-shadow: 0px 1px 1px white;
+        background: rgb(242,246,255);
+        background: -moz-linear-gradient(top,  rgba(242,246,255,1) 0%, rgba(214,227,255,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(242,246,255,1)), color-stop(100%,rgba(214,227,255,1)));
+        background: -webkit-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(214,227,255,1) 100%);
+        background: -o-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(214,227,255,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(214,227,255,1) 100%);
+        background: linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(214,227,255,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6ff', endColorstr='#d6e3ff',GradientType=0 );
+
+
+      }
+      #counter .main .inside ul.log li .date{
+        font-size: 80%;
+        margin: 36% 10%;
+        position: absolute;
+        font-weight: bold;
+      }
+      #counter .main .inside ul.log li .time{
+        position: absolute;
+        right: 15%;
+        font-size: 170%;
+        top: 18%;
+      }
+      #counter .main .inside ul.log li .arrow{
+        position: absolute;
+        display: none;
+        padding: 3% 4% 4% 83%;
+        right: 0%;
+        font-size: 140%;
+      }
+      #counter .main .inside ul.log li .trash{
+        position: absolute;
+        left: 4px;
+        top: 12px;
+        width: 9px;
+        height: 19px;
+        background-color: red;
+        display: none;
+        color: white;
+        text-shadow: none;
+        padding: 0px 5px;
+        border-radius: 15px;
+        border: 2px solid white;
+        font-weight: bold;
+        -moz-box-shadow: 1px 1px 2px grey;
+        -webkit-box-shadow: 1px 1px 2px grey;
+        box-shadow: 1px 1px 2px grey;
+        background: rgb(255,170,170);
+        background: -moz-linear-gradient(top,  rgba(255,170,170,1) 0%, rgba(255,28,31,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,170,170,1)), color-stop(100%,rgba(255,28,31,1)));
+        background: -webkit-linear-gradient(top,  rgba(255,170,170,1) 0%,rgba(255,28,31,1) 100%);
+        background: -o-linear-gradient(top,  rgba(255,170,170,1) 0%,rgba(255,28,31,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(255,170,170,1) 0%,rgba(255,28,31,1) 100%);
+        background: linear-gradient(top,  rgba(255,170,170,1) 0%,rgba(255,28,31,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaaaa', endColorstr='#ff1c1f',GradientType=0 );
+
+      }
+      #counter .new .new-counter,
+      #counter .edit .edit-counter{
+        padding: 20% 0% 10%;
+        text-align:center;
+        color: white;
+      }
+      #counter .new .new-counter p,
+      #counter .edit .edit-counter p{
+        text-align: left;
+        padding: 5% 9% 0%;
+      }
+      #counter .new .new-counter .notes,
+      #counter .edit .edit-counter .notes{
+        border: none;
+        padding: 3%;
+        margin: 3% auto;
+        width: 76%;
+        border-radius: 5px;
+        font-size: 100%;
+      }
+      #counter .new select,
+      #counter .edit select{
+        font-size:100%;
+      }
+
+      /* chart */
+      #chart .main .inside{
+        color:white;
+      }
+      #chart .main .inside p{
+        text-align: right;
+        font-size: 70%;
+        padding: 2%;
+        position: absolute;
+        top: 0%;
+        right: 0%;
+        background-color: #022254;
+        width: 100%;
+        z-index: 15;
+      }
+      #chart .main .inside .rows{
+        overflow: auto;
+        margin: 0px;
+        padding: 7% 0% 1%;
+        height: 93.5%;
+      }
+      #chart .main .inside .rows li{
+        list-style-type: none;
+        height: 8.5%;
+        padding: 2% 0% 0%;
+        margin: 0%;
+      }
+      #chart .main .inside .rows li span:not(.label){
+        float: left;
+        width: 6%;
+        height: 60%;
+        border: 2px solid silver;
+        margin: 0% 1%;
+        border-radius: 10px;
+        background: rgb(255,255,255);
+        background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(244,244,244,1) 50%, rgba(234,234,234,1) 51%, rgba(234,234,234,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(50%,rgba(244,244,244,1)), color-stop(51%,rgba(234,234,234,1)), color-stop(100%,rgba(234,234,234,1)));
+        background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(244,244,244,1) 50%,rgba(234,234,234,1) 51%,rgba(234,234,234,1) 100%);
+        background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(244,244,244,1) 50%,rgba(234,234,234,1) 51%,rgba(234,234,234,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(244,244,244,1) 50%,rgba(234,234,234,1) 51%,rgba(234,234,234,1) 100%);
+        background: linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(244,244,244,1) 50%,rgba(234,234,234,1) 51%,rgba(234,234,234,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eaeaea',GradientType=0 );
+
+      }
+      #chart .main .inside .rows li span:not(.label).selected{
+        background: rgb(83,255,103);
+        background: -moz-linear-gradient(top,  rgba(83,255,103,1) 0%, rgba(83,255,103,1) 50%, rgba(39,255,64,1) 51%, rgba(39,255,64,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(83,255,103,1)), color-stop(50%,rgba(83,255,103,1)), color-stop(51%,rgba(39,255,64,1)), color-stop(100%,rgba(39,255,64,1)));
+        background: -webkit-linear-gradient(top,  rgba(83,255,103,1) 0%,rgba(83,255,103,1) 50%,rgba(39,255,64,1) 51%,rgba(39,255,64,1) 100%);
+        background: -o-linear-gradient(top,  rgba(83,255,103,1) 0%,rgba(83,255,103,1) 50%,rgba(39,255,64,1) 51%,rgba(39,255,64,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(83,255,103,1) 0%,rgba(83,255,103,1) 50%,rgba(39,255,64,1) 51%,rgba(39,255,64,1) 100%);
+        background: linear-gradient(top,  rgba(83,255,103,1) 0%,rgba(83,255,103,1) 50%,rgba(39,255,64,1) 51%,rgba(39,255,64,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#53ff67', endColorstr='#27ff40',GradientType=0 );
+
+      }
+      #chart .main .inside .rows li span:not(.label).logged{
+        background: rgb(243,255,84);
+        background: -moz-linear-gradient(top,  rgba(243,255,84,1) 0%, rgba(243,255,84,1) 50%, rgba(240,255,40,1) 51%, rgba(240,255,40,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(243,255,84,1)), color-stop(50%,rgba(243,255,84,1)), color-stop(51%,rgba(240,255,40,1)), color-stop(100%,rgba(240,255,40,1)));
+        background: -webkit-linear-gradient(top,  rgba(243,255,84,1) 0%,rgba(243,255,84,1) 50%,rgba(240,255,40,1) 51%,rgba(240,255,40,1) 100%);
+        background: -o-linear-gradient(top,  rgba(243,255,84,1) 0%,rgba(243,255,84,1) 50%,rgba(240,255,40,1) 51%,rgba(240,255,40,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(243,255,84,1) 0%,rgba(243,255,84,1) 50%,rgba(240,255,40,1) 51%,rgba(240,255,40,1) 100%);
+        background: linear-gradient(top,  rgba(243,255,84,1) 0%,rgba(243,255,84,1) 50%,rgba(240,255,40,1) 51%,rgba(240,255,40,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3ff54', endColorstr='#f0ff28',GradientType=0 );
+
+      }
+      #chart .main .inside .rows li .label{
+        position: absolute;
+        right: 4px;
+        font-size: 70%;
+        margin: 0;
+        bottom: -6px;
+      }
+    </style>
+    <script>
+      var editId = 0
+      var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      function getId( element ){
+        var id = element.attr('id');
+        return id.substring(0, id.indexOf('-'));
+      }
+      function convertDate( date ){
+        return months[ date.getMonth() ]+" "+date.getDate()+", "+date.getFullYear();
+      }
+      function convertSecondsToString( secs ){
+        var seconds = secs;
+        var minutes = Math.floor(seconds/60);
+        seconds = seconds%60;
+        var hours = Math.floor(minutes/60);
+        minutes = minutes%60;
+        if( minutes < 10 ){
+          minutes = "0"+minutes;
+        }
+        if( seconds < 10 ){
+          seconds = "0"+seconds;
+        }
+        return hours+":"+minutes+":"+seconds;
+      }
+      $(function(){
+        /* prayers li click start*/
+        $('#prayers ul.inside li .arrow').live('click', function(){
+          editId = $(this).parent().index();
+          $('#prayers .edit .title .text').val(viewModel.prayers()[editId].title());
+          $('#prayers .edit .description .text').val(viewModel.prayers()[editId].description());
+          $('#prayers .edit').animate({right:'0%'});
+          $('#prayers .main').animate({left:'-100%'});
+        });
+        $('#prayers ul.inside li .trash').live('click', function(){
+          editId = $(this).parent().index();
+          if( confirm('Delete?') ){
+            for( var i=editId+1; i < viewModel.prayers().length; i++ ){
+              viewModel.prayers()[i-1] = viewModel.prayers()[i];
+            }
+            $('#prayers ul.inside li').eq(editId).slideUp(function(){
+              viewModel.prayers.pop();
+            });
+          }
+        });
+        /* prayers li click end */
+        /* counter li click start */
+        $('#counter ul.log li .arrow').live('click', function(){
+          editId = $(this).parent().index();
+          var seconds = viewModel.logs()[editId].seconds();
+          var minutes = Math.floor(seconds/60);
+          seconds = seconds%60;
+          var hours = Math.floor(minutes/60);
+          minutes = minutes%60;
+          var note = viewModel.logs()[editId].note();
+          $('#counter .edit .edit-counter .hours').val(hours);
+          $('#counter .edit .edit-counter .minutes').val(minutes);
+          $('#counter .edit .edit-counter .seconds').val(seconds);
+          $('#counter .edit .edit-counter .notes').val(note);
+          
+          $('#counter .edit').animate({right:'0%'});
+          $('#counter .main').animate({left:'-100%'});
+        });
+        $('#counter ul.log li .trash').live('click', function(){
+          editId = $(this).parent().index();
+          if( confirm('Delete?') ){
+            var total = viewModel.totalSeconds();
+            var totalChants = viewModel.totalChants()
+            total -= viewModel.logs()[editId].seconds();
+            totalChants -= viewModel.logs()[editId].seconds()*1.111;
+            viewModel.totalChants(totalChants);
+            viewModel.totalSeconds(total);
+            for( var i=editId+1; i < viewModel.logs().length; i++ ){
+              viewModel.logs()[i-1] = viewModel.logs()[i];
+            }
+            $('#counter ul.log li').eq(editId).slideUp(function(){
+              viewModel.logs.pop();
+            });
+          }
+        });
+        /* counter li click end */
+        /* setup chart */
+        for( var i = 0; i < 100; i++ ){
+          var num = addCommas(i*10000+10000);
+          var li = $('<li></li>');
+          for( var x = 0; x < 10; x++ ){
+            li.append('<span></span>');
+          }
+          li.append('<span class="label">'+num+'</span>');
+          $('.rows').append(li);
+        }          
+        function addCommas(nStr){
+          nStr += '';
+          x = nStr.split('.');
+          x1 = x[0];
+          x2 = x.length > 1 ? '.' + x[1] : '';
+          var rgx = /(\d+)(\d{3})/;
+          while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+          }
+          return x1 + x2;
+        }
+        /* chart circle click start */
+        $('#chart .main .rows li span').click(function(){
+          if( !$(this).hasClass('selected') ){
+            if( $(this).hasClass('logged') ){
+              $(this).removeClass('logged');
+            } else {
+              $(this).addClass('logged');
+            }
+          }
+        });
+        /* chart circle click end */
+        /* fill circle start */
+        viewModel.fillCircles();
+        /* fill circle end */
+      });//document ready
+    </script>
+  </head>
+  <body>
+    <div id="content">
+          <!-- prayers -->
+          <div id="prayers" style="display:block">
+            <!-- main -->
+            <div class="main">
+              <div class="top">
+                <div class="header">
+                  <h1>Prayers</h1>
+                  <div class="edit-button" id="prayers-edit" data-bind="visible:viewModel.prayers().length > 0, click:prayersEdit">edit</div>
+                  <div class="new-button" id="prayers-new" data-bind="click:prayersNew">+</div>
+                </div>
+                <ul class="inside" data-bind="foreach:prayers">
+                  <li><span class="trash">&ndash;</span><span class="title" data-bind="text:title()"></span><span class="date" data-bind="text:months[date().getMonth()]+' '+date().getDate()+', '+date().getFullYear()"></span><span class="arrow">></span></li>
+                </ul>
+              </div>
+              <div class="bottom">
+                <div class="bottom-button selected" id="prayers-button" data-bind="click:onClickTabPrayers"><p>Prayers</p></div>
+                <div class="bottom-button" id="counter-button" data-bind="click:onClickTabCounter"><p>Counter</p></div>
+                <div class="bottom-button" id="chart-button" data-bind="click:onClickTabChart"><p>Chart</p></div>
+              </div>
+            </div>
+            <!-- edit -->
+            <div class="edit">
+              <div class="header">
+                  <h1>Edit Prayer</h1>
+                  <div class="cancel-button" id="prayers-cancel" data-bind="click:prayersEditCancel">cancel</div>
+                  <div class="save-button" id="prayers-save" data-bind="click:prayersEditSave">save</div>
+                </div>
+                <div class="inside">
+                  <div class="title">
+                    <span class="label">Title</span>
+                    <input class="text" type="text"/>
+                  </div>
+                  <div class="description">
+                    <span class="label">Description</span>
+                   <input class="text" type="text"/>
+                  </div>
+                </div>
+            </div>
+            <!-- new -->
+            <div class="new">
+              <div class="header">
+                  <h1>New Prayer</h1>
+                  <div class="cancel-button" id="prayers-cancel" data-bind="click:prayersNewCancel">cancel</div>
+                  <div class="done-button" id="prayers-done" data-bind="click:prayersNewDone">done</div>
+                </div>
+                <div class="inside">
+                  <div class="title">
+                    <span class="label">Title</span>
+                    <input class="text" type="text"/>
+                  </div>
+                  <div class="description">
+                    <span class="label">Description</span>
+                   <input class="text" type="text"/>
+                  </div>
+                </div>
+            </div>
+          </div>
+
+
+           <!-- counter -->
+          <div id="counter">
+            <!-- main -->
+            <div class="main">
+              <div class="top">
+                <div class="header">
+                  <h1>Counter</h1>
+                  <div class="edit-button" id="counter-edit"  data-bind="visible:viewModel.logs().length > 0, click:counterEdit">edit</div>
+                  <div class="new-button" id="counter-new" data-bind="click:counterNew">+</div>
+                </div>
+                <div class="inside">
+                  <div class="stopwatch">
+                    <div class="display">
+                      <p class="display-totalChants" data-bind="text:Math.round(totalChants())"></p>
+                      <p class="display-time" data-bind="text:time"></p>
+                      <p class="display-timeTotal" data-bind="text:timeTotal"></p>
+                    </div>
+                    <div class="buttons">
+                      <span class="buttons-start" data-bind="visible:startDisplay, click:start">Start</span>
+                      <span class="buttons-pause" data-bind="visible:pauseDisplay, click:pause">Pause</span>
+                      <span class="buttons-reset" data-bind="click:reset">Reset</span>
+                      <span class="buttons-log" data-bind="click:log">Log</span>
+                    </div>
+                  </div>
+                  <ul class="log" data-bind="foreach:logs">
+                    <li><span class="trash">&ndash;</span><span class="date" data-bind="text:convertDate(timestamp() )"></span><span class="time" data-bind="text:convertSecondsToString(seconds())"></span><span class="arrow">&gt;</span></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="bottom">
+                <div class="bottom-button" id="prayers-button" data-bind="click:onClickTabPrayers"><p>Prayers</p></div>
+                 <div class="bottom-button selected" id="counter-button" data-bind="click:onClickTabCounter"><p>Counter</p></div>
+                <div class="bottom-button" id="chart-button" data-bind="click:onClickTabChart"><p>Chart</p></div>
+              </div>
+            </div>
+            <!-- edit -->
+            <div class="edit">
+              <div class="header">
+                <h1>Edit Counter</h1>
+                <div class="cancel-button" id="counter-cancel" data-bind="click:counterEditCancel">cancel</div>
+                <div class="save-button" id="counter-save" data-bind="click:counterEditSave">save</div>
+              </div>
+              <div class="inside">
+                <div class="edit-counter">
+                  <select class="hours">
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                  </select>
+                  <span>hours</span>
+                  <select class="minutes">
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    <option>25</option>
+                    <option>26</option>
+                    <option>27</option>
+                    <option>28</option>
+                    <option>29</option>
+                    <option>30</option>
+                    <option>31</option>
+                    <option>32</option>
+                    <option>33</option>
+                    <option>34</option>
+                    <option>35</option>
+                    <option>36</option>
+                    <option>37</option>
+                    <option>38</option>
+                    <option>39</option>
+                    <option>40</option>
+                    <option>41</option>
+                    <option>42</option>
+                    <option>43</option>
+                    <option>44</option>
+                    <option>45</option>
+                    <option>46</option>
+                    <option>47</option>
+                    <option>48</option>
+                    <option>49</option>
+                    <option>50</option>
+                    <option>51</option>
+                    <option>52</option>
+                    <option>53</option>
+                    <option>54</option>
+                    <option>55</option>
+                    <option>56</option>
+                    <option>57</option>
+                    <option>58</option>
+                    <option>59</option>  
+                  </select>
+                  <span>mins</span>
+                  <select class="seconds">
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                    <option>21</option>
+                    <option>22</option>
+                    <option>23</option>
+                    <option>24</option>
+                    <option>25</option>
+                    <option>26</option>
+                    <option>27</option>
+                    <option>28</option>
+                    <option>29</option>
+                    <option>30</option>
+                    <option>31</option>
+                    <option>32</option>
+                    <option>33</option>
+                    <option>34</option>
+                    <option>35</option>
+                    <option>36</option>
+                    <option>37</option>
+                    <option>38</option>
+                    <option>39</option>
+                    <option>40</option>
+                    <option>41</option>
+                    <option>42</option>
+                    <option>43</option>
+                    <option>44</option>
+                    <option>45</option>
+                    <option>46</option>
+                    <option>47</option>
+                    <option>48</option>
+                    <option>49</option>
+                    <option>50</option>
+                    <option>51</option>
+                    <option>52</option>
+                    <option>53</option>
+                    <option>54</option>
+                    <option>55</option>
+                    <option>56</option>
+                    <option>57</option>
+                    <option>58</option>
+                    <option>59</option>  
+                  </select>
+                  <span>secs</span>
+                  <p>notes:</p>
+                  <input type="text" class="notes"/>
+                </div>
+              </div>
+            </div>
+            <!-- new -->
+            <div class="new">
+              <div class="header">
+                  <h1>New Counter</h1>
+                  <div class="cancel-button" id="counter-cancel" data-bind="click:counterNewCancel">cancel</div>
+                  <div class="done-button" id="counter-done" data-bind="click:counterNewDone">done</div>
+                </div>
+                <div class="inside">
+                  <div class="new-counter">
+                    <select class="hours">
+                      <option>0</option>
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                      <option>6</option>
+                      <option>7</option>
+                      <option>8</option>
+                      <option>9</option>
+                      <option>10</option>
+                      <option>11</option>
+                      <option>12</option>
+                      <option>13</option>
+                      <option>14</option>
+                      <option>15</option>
+                      <option>16</option>
+                      <option>17</option>
+                      <option>18</option>
+                      <option>19</option>
+                      <option>20</option>
+                      <option>21</option>
+                      <option>22</option>
+                      <option>23</option>
+                      <option>24</option>
+                    </select>
+                    <span>hours</span>
+                    <select class="minutes">
+                      <option>0</option>
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                      <option>6</option>
+                      <option>7</option>
+                      <option>8</option>
+                      <option>9</option>
+                      <option>10</option>
+                      <option>11</option>
+                      <option>12</option>
+                      <option>13</option>
+                      <option>14</option>
+                      <option>15</option>
+                      <option>16</option>
+                      <option>17</option>
+                      <option>18</option>
+                      <option>19</option>
+                      <option>20</option>
+                      <option>21</option>
+                      <option>22</option>
+                      <option>23</option>
+                      <option>24</option>
+                      <option>25</option>
+                      <option>26</option>
+                      <option>27</option>
+                      <option>28</option>
+                      <option>29</option>
+                      <option>30</option>
+                      <option>31</option>
+                      <option>32</option>
+                      <option>33</option>
+                      <option>34</option>
+                      <option>35</option>
+                      <option>36</option>
+                      <option>37</option>
+                      <option>38</option>
+                      <option>39</option>
+                      <option>40</option>
+                      <option>41</option>
+                      <option>42</option>
+                      <option>43</option>
+                      <option>44</option>
+                      <option>45</option>
+                      <option>46</option>
+                      <option>47</option>
+                      <option>48</option>
+                      <option>49</option>
+                      <option>50</option>
+                      <option>51</option>
+                      <option>52</option>
+                      <option>53</option>
+                      <option>54</option>
+                      <option>55</option>
+                      <option>56</option>
+                      <option>57</option>
+                      <option>58</option>
+                      <option>59</option>  
+                    </select>
+                    <span>mins</span>
+                    <select class="seconds">
+                      <option>0</option>
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                      <option>6</option>
+                      <option>7</option>
+                      <option>8</option>
+                      <option>9</option>
+                      <option>10</option>
+                      <option>11</option>
+                      <option>12</option>
+                      <option>13</option>
+                      <option>14</option>
+                      <option>15</option>
+                      <option>16</option>
+                      <option>17</option>
+                      <option>18</option>
+                      <option>19</option>
+                      <option>20</option>
+                      <option>21</option>
+                      <option>22</option>
+                      <option>23</option>
+                      <option>24</option>
+                      <option>25</option>
+                      <option>26</option>
+                      <option>27</option>
+                      <option>28</option>
+                      <option>29</option>
+                      <option>30</option>
+                      <option>31</option>
+                      <option>32</option>
+                      <option>33</option>
+                      <option>34</option>
+                      <option>35</option>
+                      <option>36</option>
+                      <option>37</option>
+                      <option>38</option>
+                      <option>39</option>
+                      <option>40</option>
+                      <option>41</option>
+                      <option>42</option>
+                      <option>43</option>
+                      <option>44</option>
+                      <option>45</option>
+                      <option>46</option>
+                      <option>47</option>
+                      <option>48</option>
+                      <option>49</option>
+                      <option>50</option>
+                      <option>51</option>
+                      <option>52</option>
+                      <option>53</option>
+                      <option>54</option>
+                      <option>55</option>
+                      <option>56</option>
+                      <option>57</option>
+                      <option>58</option>
+                      <option>59</option>  
+                    </select>
+                    <span>secs</span>
+                    <p>notes:</p>
+                    <input type="text" class="notes"/>
+                  </div>
+                </div>
+            </div>
+          </div>
+
+
+
+          <!-- chart -->
+          <div id="chart">
+            <!-- main -->
+            <div class="main">
+              <div class="top">
+                <div class="header">
+                  <h1>Chart</h1>
+                  <div class="done-button" id="chart-done" data-bind="click:chartDone">log</div>
+                </div>
+                <div class="inside">
+                  <p>Each circle represents 15 minutes</p>
+                  <ul class="rows">
+                  
+                  </ul>
+                </div>
+              </div>
+              <div class="bottom">
+                <div class="bottom-button" id="prayers-button" data-bind="click:onClickTabPrayers"><p>Prayers</p></div>
+                 <div class="bottom-button" id="counter-button" data-bind="click:onClickTabCounter"><p>Counter</p></div>
+                <div class="bottom-button selected" id="chart-button" data-bind="click:onClickTabChart"><p>Chart</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </body>
+</html>
