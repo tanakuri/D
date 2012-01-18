@@ -114,27 +114,37 @@
       .new .header .done-button,
       #chart .header .done-button{
         position: absolute;
-        padding: 1.5%;
-        top: 18%;
+        top: 7px;
         border-radius: 5px;
-        border: 1px solid white;
+        border-top: 1px solid #3384f5;
+        //border-right: 1px solid #3384f5;
+        //border-left: 1px solid #3384f5;
+        border-bottom: 1px solid #64aaf7;
         border-image: initial;
-        font-size: 90%;
-        background: rgba(0, 0, 0, 0.2);
+        font-size: 0.9em;
+        background: rgba(24, 90, 200, 0.4);
+      }
+      .main .top .header .edit-button,
+      .edit .header .cancel-button,
+      .new .header .cancel-button,
+      .edit .header .save-button, 
+      .new .header .done-button,
+       #chart .header .done-button{
+        width: 55px;
+        line-height:26px;
+        height:26px;
+        text-align: center;
+        box-shadow: inset 0px 0px 2px #15448a;
       }
       .main .top .header .edit-button,
       .edit .header .cancel-button,
       .new .header .cancel-button{
         left: 10px;
-        width: 45px;
-        text-align: center;
       }
       .edit .header .save-button, 
       .new .header .done-button,
        #chart .header .done-button{
         right: 10px;
-        width: 45px;
-        text-align: center;
       }
       .main .top .header .new-button{
         right: 10px;
@@ -144,7 +154,7 @@
         height: 15px;
         line-height: 10px;
         padding: 5px;
-        
+        box-shadow: inset 0px 0px 2px #15448a;
       }
       .main .top .inside{
         height:90%;
@@ -155,12 +165,11 @@
         background-color:black;
       }
       .main .bottom .bottom-button{
-        float:left;
-        width:33.33%;
-        height:100%;
-      }
-      .main .bottom .bottom-button:not(:last-child){
-        border-right:1px solid #333;
+        float: left;
+        width: 30%;
+        height: 90%;
+        margin: 2px 5px;
+        border-radius: 4px;
       }
       .main .bottom .bottom-button.selected{
         background: rgb(66,66,66);
@@ -176,9 +185,12 @@
         color:white;
       }
       .main .bottom .bottom-button p{
-        text-align:center;
-        font-size: 0.8em;
-        color:grey;
+        text-align: center;
+        font-size: 0.7em;
+        color: grey;
+        position: absolute;
+        width: 100%;
+        bottom: 0px;
       }
       ul.inside{
         margin:0px;
@@ -189,17 +201,18 @@
         list-style-type:none;
         height:20%;
         overflow:hidden;
-        border-bottom:1px solid #3F7FFF;
+        border-bottom:1px solid #EAEAEA;
         color: #333;
         text-shadow: 0px 1px 1px white;
         background: rgb(242,246,255);
-        background: -moz-linear-gradient(top,  rgba(242,246,255,1) 0%, rgba(214,227,255,1) 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(242,246,255,1)), color-stop(100%,rgba(214,227,255,1)));
-        background: -webkit-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(214,227,255,1) 100%);
-        background: -o-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(214,227,255,1) 100%);
-        background: -ms-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(214,227,255,1) 100%);
-        background: linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(214,227,255,1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6ff', endColorstr='#d6e3ff',GradientType=0 );
+        background: -moz-linear-gradient(top,  rgba(242,246,255,1) 0%, rgba(255,255,255,1) 2%, rgba(244,244,244,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(242,246,255,1)), color-stop(2%,rgba(255,255,255,1)), color-stop(100%,rgba(244,244,244,1)));
+        background: -webkit-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(255,255,255,1) 2%,rgba(244,244,244,1) 100%);
+        background: -o-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(255,255,255,1) 2%,rgba(244,244,244,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(255,255,255,1) 2%,rgba(244,244,244,1) 100%);
+        background: linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(255,255,255,1) 2%,rgba(244,244,244,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6ff', endColorstr='#f4f4f4',GradientType=0 );
+
       }
       ul.inside li .trash{
         z-index: 10;
@@ -373,18 +386,17 @@
       #counter .main .inside ul.log li{
         list-style-type:none;
         height:25%;
-        border-bottom:1px solid #3F7FFF;
+        border-bottom:1px solid #EAEAEA;
         color: #333;
         text-shadow: 0px 1px 1px white;
         background: rgb(242,246,255);
-        background: -moz-linear-gradient(top,  rgba(242,246,255,1) 0%, rgba(214,227,255,1) 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(242,246,255,1)), color-stop(100%,rgba(214,227,255,1)));
-        background: -webkit-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(214,227,255,1) 100%);
-        background: -o-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(214,227,255,1) 100%);
-        background: -ms-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(214,227,255,1) 100%);
-        background: linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(214,227,255,1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6ff', endColorstr='#d6e3ff',GradientType=0 );
-
+        background: -moz-linear-gradient(top,  rgba(242,246,255,1) 0%, rgba(255,255,255,1) 2%, rgba(244,244,244,1) 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(242,246,255,1)), color-stop(2%,rgba(255,255,255,1)), color-stop(100%,rgba(244,244,244,1)));
+        background: -webkit-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(255,255,255,1) 2%,rgba(244,244,244,1) 100%);
+        background: -o-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(255,255,255,1) 2%,rgba(244,244,244,1) 100%);
+        background: -ms-linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(255,255,255,1) 2%,rgba(244,244,244,1) 100%);
+        background: linear-gradient(top,  rgba(242,246,255,1) 0%,rgba(255,255,255,1) 2%,rgba(244,244,244,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6ff', endColorstr='#f4f4f4',GradientType=0 );
 
       }
       #counter .main .inside ul.log li .date{
