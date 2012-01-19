@@ -224,27 +224,6 @@ var viewModel = {
 			$("#counter .new .notes").val("");
 		});
 	},
-	chartDone:function(){
-		if( confirm('log new fill-ins?') ){
-			var totalChants = this.totalChants();
-			var totalSeconds = this.totalSeconds();
-
-			var circles = 0;
-			$('#chart .rows li span.logged').each(function(){
-				$(this).removeClass('logged').addClass('selected');
-				circles++;
-			});
-			totalSeconds += circles*15*60;
-			totalChants += totalSeconds*1.111;
-			this.totalChants(totalChants);
-			this.totalSeconds(totalSeconds);
-			this.logs.push({
-				timestamp: ko.observable(new Date() ), 
-				seconds: ko.observable(circles*15*60), 
-				note: ko.observable("")
-			});
-		}
-	},
 	fillCircles:function(){
 		var secs = viewModel.totalSeconds();
 		var mins = secs/60;
