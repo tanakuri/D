@@ -3,12 +3,7 @@ var viewModel = {
 	totalSeconds: ko.observable(0),
 	totalChants: ko.observable(0.0),
 	seconds:ko.observable(0),
-	prayers: ko.observableArray([
-		{title:ko.observable("pppp"), 
-	     description:ko.observable("fefeS"), 
-	     completed:false,
-	     date:ko.observable(new Date())}
-	]),
+	prayers: ko.observableArray([]),
 	logs: ko.observableArray([]), //timestamp: ko.observable( Date() ), seconds: ko.observable(int), note:ko.observable(string)
 	onClickTabPrayers:function(){
 		if( $('#counter .main .edit-button').text() === "done" ){
@@ -114,7 +109,6 @@ var viewModel = {
 	        viewModel.newPrayer({
 	          title:ko.observable(title), 
 	          description:ko.observable(desc), 
-	          completed:false, 
 	          date:ko.observable(new Date())
 	        });
 	        $('#prayers .new').animate({bottom:'-100%'}, 300, function(){

@@ -27,32 +27,30 @@
         height:100%;
         display:none;
         overflow:hidden;
+        background:url('bg.png');
       }
       .main,
       .edit,
       .new{
         width:100%;
         height:100%;
-        background:url('stripes.png');
+        background:url('bg.png');
       }
       .main{
         position:absolute;
         left:0px;
         top:0px;
-        background:url('bg2.png');
       }
       .edit{
         position:absolute;
         right:-100%;
         top:0px;
         z-index:20;
-        background-color:silver;
       }
       .new{
         position:absolute;
         bottom:-100%;
         z-index:20;
-        background-color:silver;
       }
       .main .top{
         width:100%;
@@ -248,15 +246,12 @@
         padding: 9% 10%;
         position: absolute;
         font-weight: bold;
-        width:140px;
-        text-overflow: ellipsis;
-        overflow: hidden;
       }
       ul.inside li .date{
         position: absolute;
-        font-size: 0.8em;
-        bottom: 6px;
-        left: 32px;
+        font-size: 90%;
+        bottom: 10%;
+        right: 10%;
       }
       ul.inside li .arrow{
         display: none;
@@ -264,101 +259,7 @@
         padding: 9% 5% 9% 82%;
         right: 0%;
       }
-      ul.inside li .completed{
-        display: inline-block;
-        position: absolute;
-        text-shadow: none;
-        color: grey;
-        font-size: 0.7em;
-        width: 100px;
-        right: 23px;
-        top: 25px;
-        background-color: blue;
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
-        border-radius: 5px;
-        overflow: hidden;
-        height: 27px;
-        border-bottom: 1px solid white;
-      }
-      ul.inside li .completed-bar{
-        width:150px;
-        height: 27px;
-        left:-50%;
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
-        border-radius: 5px;
-        position: absolute;
-      }
-      ul.inside li .completed-bar span{
-        position:absolute;
-        top:0px;
-        display: inline-block;
-        width: 52px;
-        height: 25px;
-        text-align: center;
-        vertical-align: top;
-        line-height: 27px;
-        font-weight:bold;
-      }
-      ul.inside li .completed-bar span.bar{
-        border: 1px solid grey;
-        border-radius: 4px;
-        box-shadow:inset 0px 0px 1px white;
-        left:50px;
-        width: 48px;
-        z-index: 30;
-        background: rgb(242,242,242);
-        background: -moz-linear-gradient(top,  rgba(242,242,242,1) 1%, rgba(255,255,255,1) 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgba(242,242,242,1)), color-stop(100%,rgba(255,255,255,1)));
-        background: -webkit-linear-gradient(top,  rgba(242,242,242,1) 1%,rgba(255,255,255,1) 100%);
-        background: -o-linear-gradient(top,  rgba(242,242,242,1) 1%,rgba(255,255,255,1) 100%);
-        background: -ms-linear-gradient(top,  rgba(242,242,242,1) 1%,rgba(255,255,255,1) 100%);
-        background: linear-gradient(top,  rgba(242,242,242,1) 1%,rgba(255,255,255,1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', endColorstr='#ffffff',GradientType=0 );
 
-
-      }
-      ul.inside li .completed-bar span.victory{
-        left:0px;
-        height:27px;
-        color: white;
-        box-shadow: inset 0px 1px 3px grey;
-        -webkit-border-top-left-radius: 5px;
-        -webkit-border-bottom-left-radius: 5px;
-        -moz-border-radius-topleft: 5px;
-        -moz-border-radius-bottomleft: 5px;
-        border-top-left-radius: 5px;
-        border-bottom-left-radius: 5px;
-        background: rgb(56,168,255);
-        background: -moz-linear-gradient(top,  rgba(56,168,255,1) 1%, rgba(56,168,255,1) 50%, rgba(86,182,255,1) 51%, rgba(153,210,255,1) 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgba(56,168,255,1)), color-stop(50%,rgba(56,168,255,1)), color-stop(51%,rgba(86,182,255,1)), color-stop(100%,rgba(153,210,255,1)));
-        background: -webkit-linear-gradient(top,  rgba(56,168,255,1) 1%,rgba(56,168,255,1) 50%,rgba(86,182,255,1) 51%,rgba(153,210,255,1) 100%);
-        background: -o-linear-gradient(top,  rgba(56,168,255,1) 1%,rgba(56,168,255,1) 50%,rgba(86,182,255,1) 51%,rgba(153,210,255,1) 100%);
-        background: -ms-linear-gradient(top,  rgba(56,168,255,1) 1%,rgba(56,168,255,1) 50%,rgba(86,182,255,1) 51%,rgba(153,210,255,1) 100%);
-        background: linear-gradient(top,  rgba(56,168,255,1) 1%,rgba(56,168,255,1) 50%,rgba(86,182,255,1) 51%,rgba(153,210,255,1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#38a8ff', endColorstr='#99d2ff',GradientType=0 );
-
-      }
-      ul.inside li .completed-bar span.pending{
-        right:0px;
-        height:27px;
-        box-shadow: inset 0px 1px 3px grey;
-        -webkit-border-top-right-radius: 5px;
-        -webkit-border-bottom-right-radius: 5px;
-        -moz-border-radius-topright: 5px;
-        -moz-border-radius-bottomright: 5px;
-        border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px;
-        background: rgb(249,249,249);
-        background: -moz-linear-gradient(top,  rgba(249,249,249,1) 1%, rgba(249,249,249,1) 50%, rgba(252,252,252,1) 51%, rgba(255,255,255,1) 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgba(249,249,249,1)), color-stop(50%,rgba(249,249,249,1)), color-stop(51%,rgba(252,252,252,1)), color-stop(100%,rgba(255,255,255,1)));
-        background: -webkit-linear-gradient(top,  rgba(249,249,249,1) 1%,rgba(249,249,249,1) 50%,rgba(252,252,252,1) 51%,rgba(255,255,255,1) 100%);
-        background: -o-linear-gradient(top,  rgba(249,249,249,1) 1%,rgba(249,249,249,1) 50%,rgba(252,252,252,1) 51%,rgba(255,255,255,1) 100%);
-        background: -ms-linear-gradient(top,  rgba(249,249,249,1) 1%,rgba(249,249,249,1) 50%,rgba(252,252,252,1) 51%,rgba(255,255,255,1) 100%);
-        background: linear-gradient(top,  rgba(249,249,249,1) 1%,rgba(249,249,249,1) 50%,rgba(252,252,252,1) 51%,rgba(255,255,255,1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9f9f9', endColorstr='#ffffff',GradientType=0 );
-      }
       /* prayers */
       #prayers .main .inside{
         overflow:auto;
@@ -758,17 +659,6 @@
         /* fill circle start */
         viewModel.fillCircles();
         /* fill circle end */
-        /* prayersCompletedBarClick */
-        $('#prayers .main .inside li  .completed .completed-bar .bar').click(function(){
-          var editId = $(this).parent().parent().parent().index();
-          if( viewModel.prayers()[editId].completed ){
-            viewModel.prayers()[editId].completed = false;
-            $(this).parent().animate({left:"-50%"}, 200);
-          } else {
-            viewModel.prayers()[editId].completed = true;
-            $(this).parent().animate({left:"0%"}, 200);
-          }
-        });
       });//document ready
     </script>
   </head>
@@ -785,19 +675,7 @@
                   <div class="new-button" id="prayers-new" data-bind="click:prayersNew">+</div>
                 </div>
                 <ul class="inside" data-bind="foreach:prayers">
-                  <li>
-                    <span class="trash">&ndash;</span>
-                    <span class="title" data-bind="text:title()"></span>
-                    <span class="date" data-bind="text:months[date().getMonth()]+' '+date().getDate()+', '+date().getFullYear()"></span>
-                    <div class="completed">
-                      <div class="completed-bar">
-                        <span class="victory">victory!</span>
-                        <span class="bar"></span>
-                        <span class="pending">pending</span>
-                      </div>
-                    </div>
-                    <span class="arrow">></span>
-                  </li>
+                  <li><span class="trash">&ndash;</span><span class="title" data-bind="text:title()"></span><span class="date" data-bind="text:months[date().getMonth()]+' '+date().getDate()+', '+date().getFullYear()"></span><span class="arrow">></span></li>
                 </ul>
               </div>
               <div class="bottom">
